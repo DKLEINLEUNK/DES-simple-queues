@@ -1,0 +1,24 @@
+from Queue import *
+
+
+def main():
+
+    print('Running queueing system simulation...')
+
+    simulation = QueueSimulation(
+        n_servers = 2, 
+        discipline = 'FIFO', 
+        mean_service_rate = 1.5, 
+        mean_arrival_rate = 1.5, 
+        max_customers = 100,
+        max_runtime = 100,
+        seed = 69420
+    )
+    
+    simulation.run()
+    
+    simulation.analyze_results()  # TODO Implement this method
+
+
+if __name__ == '__main__':
+    main()
