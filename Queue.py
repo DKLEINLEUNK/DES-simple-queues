@@ -79,37 +79,3 @@ class QueueSimulation:
         # TODO Implement analysis and plotting of results
         
         pass
-
-
-# class Customer:
-    
-#     '''Models a customer in a queueing system (generator object).'''
-    
-#     def __init__(self, env, server, service_rate, data, customer_id):
-        
-#         self.env = env
-#         self.server = server
-#         self.service_rate = service_rate
-#         self.data = data
-#         self.customer_id = customer_id
-#         self.arrival_time = env.now
-        
-#         queue_length = max([0, len(server.put_queue) + len(server.users)])  # = Queue length
-        
-#         print("%7.4f %s: New customer. %s" % (env.now, customer_id, queue_length))
-
-#         self.env.process(self.process())
-        
-
-    
-#     def process(self):
-
-#         with self.server.request() as request:
-            
-#             yield request
-            
-#             service_start = self.env.now
-#             yield self.env.timeout(random.expovariate(self.service_rate))
-#             service_end = self.env.now
-
-#             self.data.append((self.arrival_time, service_start, service_end))
