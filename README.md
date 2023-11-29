@@ -12,13 +12,13 @@ Project by:
 ### Code-related
 
 - [ ] Utilizing different distributions (currently: exponential).
-- [ ] Extending to n > 1 servers.
 - [ ] Incorporate system loads.
-- [ ] Exporting relevant simulation data.
 - [ ] Analyzing simulation data.
 - [ ] Plotting simulation data.
 - [ ] Add doc-strings.
 - [ ] ...
+- [x] Extending to n > 1 servers.
+- [x] Exporting relevant simulation data.
 
 ### Project-related
 
