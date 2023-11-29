@@ -66,9 +66,9 @@ class QueueSimulation:
             waiting_time = self.env.now - arrival_time
             print("[%7.4fs] ID %s: Arrived (waited %6.3fs)" % (self.env.now, id, waiting_time))
 
-            # Assumes exponential inter-arrival times
-            arrival_interval = random.expovariate(1 / self.mean_arrival_rate)
-            yield self.env.timeout(arrival_interval)
+            # Assumes exponential inter-service times
+            t_inter_service = random.expovariate(1 / self.mean_service_rate)
+            yield self.env.timeout(t_inter_service)
             print("[%7.4fs] ID %s: Finished." % (self.env.now, id))
 
             # self.data.append((self.env.now, service_start, service_end))  # TODO Implement data collection

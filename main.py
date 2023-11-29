@@ -6,11 +6,11 @@ def main():
     print('Running queueing system simulation...')
 
     simulation = QueueSimulation(
-        n_servers = 2, 
-        discipline = 'FIFO', 
-        mean_service_rate = 1.5, 
-        mean_arrival_rate = 1.5, 
-        max_customers = 100,
+        n_servers = 2,
+        discipline = 'FIFO',
+        mean_service_rate = 10,
+        mean_arrival_rate = 1, 
+        max_customers = 50,
         max_runtime = 100,
         seed = 69420
     )
