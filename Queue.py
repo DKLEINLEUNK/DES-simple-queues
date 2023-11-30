@@ -9,9 +9,11 @@ class QueueSimulation:
     
     '''Handles simulation of queueing system.'''
     
-    def __init__(self, n_servers, discipline, mean_service_rate, mean_arrival_rate, max_customers, max_runtime, seed=None):
+    def __init__(self, n_servers, discipline, mean_service_rate, mean_arrival_rate, max_customers, max_runtime, seed=None, B="M"):
         
-        '''Initializes the simulation environment and parameters.'''
+        '''
+        Initializes the simulation environment and parameters.
+        '''
 
         if seed is not None: random.seed(seed)
 
@@ -26,6 +28,12 @@ class QueueSimulation:
 
         self.log = pd.DataFrame(columns=['ID', 'Arrival time', 'Waiting time', 'Service time', 'Departure time', 'in_queue', 'in_system', 'priority'])
 
+        distributions = {
+            "M": random.expovariate,
+            "D": lambda x : x,
+            "H": lambda x : 0.75 * random.expovariate(1.0) + 0.25 * random.expovariate(5.0) 
+        }
+        self.service_distribution = distributions[B]
 
     def run(self):
         
@@ -66,7 +74,7 @@ class QueueSimulation:
         arrival_time = self.env.now
 
         # Prepare service:
-        t_inter_service = random.expovariate(self.mean_service_rate)
+        t_inter_service = self.service_distribution(self.mean_service_rate)
         
         # Check for discipline:
         if self.discipline == 'FIFO': prio = 0  # all customers have equal priority
