@@ -24,18 +24,16 @@ class QueueSimulation:
         self.max_customers = max_customers
         self.max_runtime = max_runtime
 
-        self.log = pd.DataFrame(columns=['ID', 'Arrival time', 'Waiting time', 'Service time', 'Departure time', 'in_queue', 'in_system'])
+        self.log = pd.DataFrame(columns=['ID', 'Arrival time', 'Waiting time', 'Service time', 'Departure time', 'in_queue', 'in_system', 'priority'])
 
 
     def run(self):
         
-        '''Initializes server resources based on discipline.'''
+        '''Initializes server resources.'''
 
-        if self.discipline == 'FIFO':
-            
-            self.server = simpy.Resource(self.env, capacity=self.n_servers)
-            self.env.process(self.arrivals())
-            self.env.run(until=self.max_runtime)
+        self.server = simpy.PriorityResource(self.env, capacity=self.n_servers)
+        self.env.process(self.arrivals())
+        self.env.run(until=self.max_runtime)
 
 
     def arrivals(self):
@@ -59,15 +57,22 @@ class QueueSimulation:
 
     def customer(self, id):
         
-        '''Handles customer service upon arrival.'''
+        '''Handles customer service upon arrival. Depends on server discipline.'''
 
         # Assess system state on arrival:
         in_queue = len(self.server.put_queue)
         in_system = in_queue + len(self.server.users)
 
         arrival_time = self.env.now
+
+        # Prepare service:
+        t_inter_service = random.expovariate(self.mean_service_rate)
         
-        with self.server.request() as request:    
+        # Check for discipline:
+        if self.discipline == 'FIFO': prio = 0  # all customers have equal priority
+        elif self.discipline == 'SJF': prio = t_inter_service  # shorter jobs have higher priority
+
+        with self.server.request(priority=prio) as request:
             
             # Wait in queue until turn comes:
             yield request
@@ -77,8 +82,7 @@ class QueueSimulation:
             
             # print("[%7.4fs] ID %s: Arrived (waited %6.3fs)" % (self.env.now, id, waiting_time))
 
-            # Service (exponential inter-service times):
-            t_inter_service = random.expovariate(self.mean_service_rate)
+            # Service:
             yield self.env.timeout(t_inter_service)
 
             # Log data on departure:
@@ -89,7 +93,8 @@ class QueueSimulation:
                 'Service time': t_inter_service,
                 'Departure time': self.env.now,
                 'in_queue': in_queue,
-                'in_system': in_system
+                'in_system': in_system,
+                'priority': prio
             }
 
             self.log = self.log._append(customer_data, ignore_index=True)
