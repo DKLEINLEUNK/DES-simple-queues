@@ -30,8 +30,12 @@ class QueueSimulation:
         self.max_runtime = max_runtime
         
         # Initialize log:
-        self.waiting_times = np.full(max_customers, np.NaN)
-        self.queue_lengths = np.full(max_customers, np.NaN)
+        # self.waiting_times = np.full(max_customers, np.NaN)
+        # self.queue_lengths = np.full(max_customers, np.NaN)
+        self.waiting_times = np.array([])
+        self.queue_lengths = np.array([])
+        self.t = np.full(max_customers, np.NaN)
+        self.N_t = np.full(max_customers, np.NaN)
 
         # Initialize service time distribution:
         distributions = {
@@ -52,9 +56,11 @@ class QueueSimulation:
         self.env.process(self.arrivals())
         self.env.run(until=self.max_runtime)
 
-        self.waiting_times = self.waiting_times[~np.isnan(self.waiting_times)]
-        self.queue_lengths = self.queue_lengths[~np.isnan(self.queue_lengths)]
-
+        # Remove NaNs from logged data:
+        # self.waiting_times = self.waiting_times[~np.isnan(self.waiting_times)]
+        # self.queue_lengths = self.queue_lengths[~np.isnan(self.queue_lengths)]
+        self.t = self.t[~np.isnan(self.t)]
+        self.N_t = self.N_t[~np.isnan(self.N_t)]
 
     def arrivals(self):
         
@@ -67,7 +73,7 @@ class QueueSimulation:
         while customer_id < self.max_customers:
             
             customer_id += 1
-
+            
             # Serve new customer:
             new_customer = self.customer(customer_id)
             self.env.process(new_customer)
@@ -85,9 +91,11 @@ class QueueSimulation:
         '''
 
         # Assess system state upon arrival:
-        # np.append(self.queue_lengths, len(self.server.put_queue))  # NOTE: does order matter here?
-        self.queue_lengths[id] = len(self.server.put_queue)
-        # in_system = in_queue + len(self.server.users)
+        self.queue_lengths = np.append(self.queue_lengths, len(self.server.put_queue))  # NOTE: does order matter here?
+        # self.queue_lengths[id] = len(self.server.put_queue)  # get queue length at time of arrival
+        t, N_t = self.get_N_t()
+        # self.t[id] = t
+        # self.N_t[id] = N_t
 
         arrival_time = self.env.now
 
@@ -104,8 +112,8 @@ class QueueSimulation:
             yield request
             
             # Arrival at server:
-            # np.append(self.queue_lengths, len(self.server.put_queue))  # NOTE: does order matter here?
-            self.waiting_times[id] = self.env.now - arrival_time
+            self.waiting_times = np.append(self.waiting_times, self.env.now - arrival_time)  # NOTE: does order matter here?
+            # self.waiting_times[id] = self.env.now - arrival_time
             
             # print("[%7.4fs] ID %s: Arrived (waited %6.3fs)" % (self.env.now, id, waiting_time))
 
@@ -114,6 +122,21 @@ class QueueSimulation:
 
             # print("[%7.4fs] ID %s: Finished." % (self.env.now, id))
 
+
+    def get_N_t(self):
+        '''
+        Returns the number of customers in the system at time t.
+        '''
+        N = len(self.server.users) + len(self.server.put_queue)
+        t = self.env.now
+        return t, N
+
+    def get_A_t(self):
+        '''
+        Returns arrivals and time t.
+        '''
+        t = self.env.now
+        return t, self.mean_arrival_rate
 
     def get_log(self):
 

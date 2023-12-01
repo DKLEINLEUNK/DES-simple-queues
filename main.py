@@ -7,7 +7,7 @@ import time
 
 def main():
 
-    # Simulation params
+    # Simulation params:
     n_servers = 2
     discipline = 'FIFO'
     mean_service_rate = 3.5
