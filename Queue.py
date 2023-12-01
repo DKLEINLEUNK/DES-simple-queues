@@ -36,7 +36,7 @@ class QueueSimulation:
         # Initialize service time distribution:
         distributions = {
             "M": random.expovariate,
-            "D": lambda x : x,
+            "D": lambda x : 1/x,
             "H": lambda x : 0.75 * random.expovariate(1.0) + 0.25 * random.expovariate(5.0) 
         }
         self.service_distribution = distributions[B]
