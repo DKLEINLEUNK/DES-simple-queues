@@ -30,8 +30,6 @@ class QueueSimulation:
         self.max_runtime = max_runtime
         
         # Initialize log:
-        # self.waiting_times = np.full(max_customers, np.NaN)
-        # self.queue_lengths = np.full(max_customers, np.NaN)
         self.waiting_times = np.array([])
         self.queue_lengths = np.array([])
         self.t = np.full(max_customers, np.NaN)
@@ -57,8 +55,6 @@ class QueueSimulation:
         self.env.run(until=self.max_runtime)
 
         # Remove NaNs from logged data:
-        # self.waiting_times = self.waiting_times[~np.isnan(self.waiting_times)]
-        # self.queue_lengths = self.queue_lengths[~np.isnan(self.queue_lengths)]
         self.t = self.t[~np.isnan(self.t)]
         self.N_t = self.N_t[~np.isnan(self.N_t)]
 
@@ -92,10 +88,7 @@ class QueueSimulation:
 
         # Assess system state upon arrival:
         self.queue_lengths = np.append(self.queue_lengths, len(self.server.put_queue))  # NOTE: does order matter here?
-        # self.queue_lengths[id] = len(self.server.put_queue)  # get queue length at time of arrival
         t, N_t = self.get_N_t()
-        # self.t[id] = t
-        # self.N_t[id] = N_t
 
         arrival_time = self.env.now
 
@@ -113,7 +106,6 @@ class QueueSimulation:
             
             # Arrival at server:
             self.waiting_times = np.append(self.waiting_times, self.env.now - arrival_time)  # NOTE: does order matter here?
-            # self.waiting_times[id] = self.env.now - arrival_time
             
             # print("[%7.4fs] ID %s: Arrived (waited %6.3fs)" % (self.env.now, id, waiting_time))
 
