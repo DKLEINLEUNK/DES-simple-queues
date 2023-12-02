@@ -60,8 +60,8 @@ if __name__ == '__main__':
 
     # adding arguments
     parser.add_argument("queue_system", help="Queueing system to use in kendall notation, f.e. MM1")
-    parser.add_argument("run_time", help="max run_time used per simulation", default=10^4, type=int)
-    parser.add_argument("-c", "--customers", help="max customers arriving in one simulation", default=10^5, type=int)
+    parser.add_argument("run_time", help="max run_time used per simulation", default=10**4, type=int)
+    parser.add_argument("-c", "--customers", help="max customers arriving in one simulation", default=10**5, type=int)
     parser.add_argument("-l", "--arrival_rate", help="mean arrival rate (lambda)", default=0.9, type=float)
     parser.add_argument("-m", "--service_rate", help="mean service rate (mu)", default=1, type=float)
     parser.add_argument("-d", "--discipline", help="how to select from queue (FIFO or prio)", default="FIFO")
