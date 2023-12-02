@@ -16,7 +16,7 @@ class QueueMetrics:
         Initializes the simulation parameters and metric calculations
         '''
 
-        self.queue_simulation = queue_object
+        self.simulation = queue_object
         self.c = queue_object.n_servers
         self.service_rate = queue_object.mean_service_rate
         self.arrival_rate = queue_object.mean_arrival_rate
@@ -87,11 +87,23 @@ class QueueMetrics:
         Returns dict with value: (mean performance metric, variance)
         """
 
-        waiting_times = self.queue_simulation.waiting_times
-        queue_lengths = self.queue_simulation.queue_lengths
+        waiting_times = self.simulation.waiting_times
+        queue_lengths = self.simulation.queue_lengths
         metrics = {
             "Average waiting time": (np.mean(waiting_times), np.var(waiting_times)),
             "Average queue length": (np.mean(queue_lengths), np.var(queue_lengths)),
         }
 
         return metrics 
+
+    def to_csv(self, queue_type, seed):
+        """
+        Saves raw data of simulation to csv. 
+        """
+        waiting_times, queue_lengths = self.simulation.get_log()
+        queue_lengths = queue_lengths[:waiting_times.size] # splice to make equal length
+        
+        data = np.vstack((waiting_times, queue_lengths)).T
+        title = f"./data/raw_data/{queue_type}_seed{seed}_rho{self.rho}_max_runtime{self.simulation.max_runtime}_lambda_{self.simulation.mean_arrival_rate}.csv"
+        np.savetxt(title, data, delimiter=',', header="waiting_times,queue_lengths")
+        return
