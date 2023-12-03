@@ -35,7 +35,7 @@ def main(queue_system, n, arrival_rate, service_rate, max_runtime, max_customers
     # save average metrics to csv
     if save:
         data = np.vstack((avg_waiting_times, avg_queue_lengths)).T
-        title = f"averages_{queue_system}_n{n}_rho{Metrics.rho}_max_runtime{simulation.max_runtime}_lambda_{simulation.mean_arrival_rate}.csv"
+        title = f"averages_{queue_system}_n{n}_rho{Metrics.rho}_max_runtime{simulation.max_runtime}_{simulation.discipline}.csv"
         np.savetxt("./data/simulation_averages/"+ title, data, delimiter=',', header="avg_waiting_times, avg_queue_lengths")
         print(f"Output saved to {title}")
     
@@ -50,6 +50,10 @@ def main(queue_system, n, arrival_rate, service_rate, max_runtime, max_customers
         print(f"Average queue length: {length:.3f}, Average wait time: {wait_time:.3f} ")
 
     waiting_lists, queue_lengths =  simulation.get_log()
+    print("*****SUPER MEANS *****")
+    print("Waiting time:", np.mean(avg_waiting_times))
+    print("Avg queue lengths", np.mean(avg_queue_lengths))
+    
     print(f"\nn_wait: {waiting_lists.size}")
     print(f"n_queue: {queue_lengths.size}")  # idk why these values are different...
 
