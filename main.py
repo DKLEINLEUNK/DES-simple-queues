@@ -35,7 +35,7 @@ def main(queue_system, n, arrival_rate, service_rate, max_runtime, max_customers
     # save average metrics to csv
     if save:
         data = np.vstack((avg_waiting_times, avg_queue_lengths)).T
-        title = f"averages_{queue_system}_n{n}_rho{Metrics.rho}_max_runtime{simulation.max_runtime}_lambda_{simulation.mean_arrival_rate}.csv"
+        title = f"averages_{queue_system}_n{n}_rho{Metrics.rho}_max_runtime{simulation.max_runtime}_{simulation.discipline}.csv"
         np.savetxt("./data/simulation_averages/"+ title, data, delimiter=',', header="avg_waiting_times, avg_queue_lengths")
         print(f"Output saved to {title}")
     
@@ -50,13 +50,17 @@ def main(queue_system, n, arrival_rate, service_rate, max_runtime, max_customers
         print(f"Average queue length: {length:.3f}, Average wait time: {wait_time:.3f} ")
 
     waiting_lists, queue_lengths =  simulation.get_log()
+    print("*****SUPER MEANS *****")
+    print("Waiting time:", np.mean(avg_waiting_times))
+    print("Avg queue lengths", np.mean(avg_queue_lengths))
+
     print(f"\nn_wait: {waiting_lists.size}")
-    print(f"n_queue: {queue_lengths.size}")  # idk why these values are different...
+    print(f"n_queue: {queue_lengths.size}")  
 
 
 if __name__ == '__main__':
     # set-up parsing command line arguments
-    parser = argparse.ArgumentParser(description="estimate mandelbrot area via sampling methods")
+    parser = argparse.ArgumentParser(description="Simulate queueing systems and measure performance")
 
     # adding arguments
     parser.add_argument("queue_system", help="Queueing system to use in kendall notation, f.e. MM1")
@@ -64,7 +68,7 @@ if __name__ == '__main__':
     parser.add_argument("-c", "--customers", help="max customers arriving in one simulation", default=10**5, type=int)
     parser.add_argument("-l", "--arrival_rate", help="mean arrival rate (lambda)", default=0.9, type=float)
     parser.add_argument("-m", "--service_rate", help="mean service rate (mu)", default=1, type=float)
-    parser.add_argument("-d", "--discipline", help="how to select from queue (FIFO or prio)", default="FIFO")
+    parser.add_argument("-d", "--discipline", help="how to select from queue (FIFO or SJF)", default="FIFO")
     parser.add_argument("-n", help="number of simulations", default=1, type=int)
     parser.add_argument("--save", action="store_true", help="store average results in csv")
     parser.add_argument("--save_raw", action="store_true", help="store all data in csv for each simulation")
