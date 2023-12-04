@@ -53,9 +53,9 @@ def main(queue_system, n, arrival_rate, service_rate, max_runtime, max_customers
     print("*****SUPER MEANS *****")
     print("Waiting time:", np.mean(avg_waiting_times))
     print("Avg queue lengths", np.mean(avg_queue_lengths))
-    
+
     print(f"\nn_wait: {waiting_lists.size}")
-    print(f"n_queue: {queue_lengths.size}")  # idk why these values are different...
+    print(f"n_queue: {queue_lengths.size}")  
 
 
 if __name__ == '__main__':
@@ -68,7 +68,7 @@ if __name__ == '__main__':
     parser.add_argument("-c", "--customers", help="max customers arriving in one simulation", default=10**5, type=int)
     parser.add_argument("-l", "--arrival_rate", help="mean arrival rate (lambda)", default=0.9, type=float)
     parser.add_argument("-m", "--service_rate", help="mean service rate (mu)", default=1, type=float)
-    parser.add_argument("-d", "--discipline", help="how to select from queue (FIFO or prio)", default="FIFO")
+    parser.add_argument("-d", "--discipline", help="how to select from queue (FIFO or SJF)", default="FIFO")
     parser.add_argument("-n", help="number of simulations", default=1, type=int)
     parser.add_argument("--save", action="store_true", help="store average results in csv")
     parser.add_argument("--save_raw", action="store_true", help="store all data in csv for each simulation")
