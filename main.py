@@ -4,7 +4,7 @@ from helpers import error_message
 import argparse
 
 # For testing purposes:
-import time
+# import time
 
 def main(queue_system, n, arrival_rate, service_rate, max_runtime, max_customers, discipline, save, save_raw):
     # Simulation params

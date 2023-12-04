@@ -11,9 +11,14 @@ class QueueMetrics:
     '''
     
     def __init__(self, queue_object):
-        
         '''
+        Description
+        -----------
         Initializes the simulation parameters and metric calculations
+
+        Parameters
+        ----------
+        queue_object : `class` QueueSimulation
         '''
 
         self.simulation = queue_object
@@ -28,7 +33,13 @@ class QueueMetrics:
 
 
     def calc_p0(self):
-        # probability customer visits an empty system
+        '''
+        Description
+        -----------
+        Calculates the probability that the system is empty.
+        I.e., customer visits an empty system.
+        '''
+
         if self.c == 1:
             return 1 - self.rho
         else:
@@ -43,6 +54,16 @@ class QueueMetrics:
 
 
     def calc_delay_prob(self ,p_0):
+        '''
+        Description
+        -----------
+        Calculates the probability that a customer will have to wait for service.
+
+        Parameters
+        ----------
+        p_0 : `float` probability that the system is empty
+        '''
+
         # probability customer will have to wait for service
         if self.c == 1:
             return self.rho
@@ -53,18 +74,37 @@ class QueueMetrics:
 
 
     def calc_exp_length(self, delay_prob):
+        '''
+        Description
+        -----------
+        Calculates the expected queue length.
+
+        Parameters
+        ----------
+        delay_prob : `float` probability that a customer will have to wait for service
+        '''
         # Queue length using little's law - excludes service
         return delay_prob * (self.rho / (1 - self.rho))
 
 
     def calc_exp_wait(self, delay_prob):
+        '''
+        Description
+        -----------
+        Calculates the expected waiting time.
+
+        Parameters
+        ----------
+        delay_prob : `float` probability that a customer will have to wait for service
+        '''
         # Queue wait time using little's law - excludes service
         return delay_prob / (self.c * self.service_rate * (1 - self.rho))
 
 
     def get_expected_metrics(self):
-
         """
+        Description
+        -----------
         Returns a dict with expected performance measures.
         """
 
@@ -82,11 +122,11 @@ class QueueMetrics:
 
 
     def get_measured_metrics(self):
-
         """
+        Description
+        -----------
         Returns dict with value: (mean performance metric, variance)
         """
-
         waiting_times = self.simulation.waiting_times
         queue_lengths = self.simulation.queue_lengths
         metrics = {

@@ -11,9 +11,32 @@ class QueueSimulation:
     '''
     
     def __init__(self, n_servers, discipline, mean_service_rate, mean_arrival_rate, max_customers, max_runtime, seed=None, B="M"):
-        
         '''
+        Description
+        -----------
         Initializes the simulation environment and parameters.
+        
+        Parameters
+        ----------
+        n_servers : `int`
+            Number of servers in the system.
+        discipline : `str`
+            Server discipline. Either 'FIFO' or 'SJF'.
+        mean_service_rate : `float`
+            Mean service rate of the system.
+        mean_arrival_rate : `float`
+            Mean arrival rate of the system.
+        max_customers : `int`
+            Maximum number of customers to simulate.
+        max_runtime : `float`
+            Maximum runtime of the simulation.
+        seed : `int`
+            Seed for random number generator.
+        B : `str`
+            Service time distribution. 
+            'M': exponential, 
+            'D': deterministic, or 
+            'H': hyperexponential.
         '''
 
         if seed is not None: random.seed(seed)
@@ -45,7 +68,6 @@ class QueueSimulation:
 
 
     def run(self):
-        
         '''
         Initializes server and starts arrivals.
         '''
@@ -59,7 +81,6 @@ class QueueSimulation:
         self.N_t = self.N_t[~np.isnan(self.N_t)]
 
     def arrivals(self):
-        
         '''
         Handles customer arrivals.
         '''
@@ -79,17 +100,13 @@ class QueueSimulation:
             yield self.env.timeout(t_inter_arrival)
 
 
-    def customer(self, id):
-        
+    def customer(self, id): 
         '''
         Handles customer service upon arrival. 
         Depends on server discipline.
         '''
-
         # Assess system state upon arrival:
         self.queue_lengths = np.append(self.queue_lengths, len(self.server.put_queue))  # NOTE: does order matter here?
-        t, N_t = self.get_N_t()
-
         arrival_time = self.env.now
 
         # Prepare service:
@@ -99,6 +116,7 @@ class QueueSimulation:
         if self.discipline == 'FIFO': prio = 0  # all customers have equal priority
         elif self.discipline == 'SJF': prio = t_inter_service  # shorter jobs have higher priority
 
+        # Request server:
         with self.server.request(priority=prio) as request:
             
             # Wait in queue until turn comes:
@@ -115,14 +133,6 @@ class QueueSimulation:
             # print("[%7.4fs] ID %s: Finished." % (self.env.now, id))
 
 
-    def get_N_t(self):
-        '''
-        Returns the number of customers in the system at time t.
-        '''
-        N = len(self.server.users) + len(self.server.put_queue)
-        t = self.env.now
-        return t, N
-
     def get_A_t(self):
         '''
         Returns arrivals and time t.
@@ -131,9 +141,7 @@ class QueueSimulation:
         return t, self.mean_arrival_rate
 
     def get_log(self):
-
         '''
         Returns `waiting_times` and `queue_lengths`.
         '''
-        
         return self.waiting_times, self.queue_lengths
