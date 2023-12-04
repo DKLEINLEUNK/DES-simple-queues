@@ -60,7 +60,7 @@ def main(queue_system, n, arrival_rate, service_rate, max_runtime, max_customers
 
 if __name__ == '__main__':
     # set-up parsing command line arguments
-    parser = argparse.ArgumentParser(description="estimate mandelbrot area via sampling methods")
+    parser = argparse.ArgumentParser(description="Simulate queueing systems and measure performance")
 
     # adding arguments
     parser.add_argument("queue_system", help="Queueing system to use in kendall notation, f.e. MM1")
