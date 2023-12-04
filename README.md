@@ -1,110 +1,92 @@
-# DES-simple-queues
+# Discrete Event Simulation: Simple Queueing Systems
 
-Project by:
+![Image](overview_plot.png)
 
+Stochastic Simulation, Assignment 2. 
+
+Authored by:
 - David - 12992976
 - Holly - 15055108
 - Nina  - 12896934
 
+## Table of Content
 
-## TO-DO
+* [Introduction](#introduction)
+* [Project Structure](#project-structure)
+* [Installation](#installation)
+* [Instructions CLI](#instructions-command-line-interface)
 
-### Code-related
+## Introduction
 
-- [ ] Utilizing different distributions (currently: exponential).
-- [ ] Incorporate system loads.
-- [ ] Analyzing simulation data.
-- [ ] Plotting simulation data.
-- [ ] Add doc-strings.
-- [ ] ...
-- [x] Extending to n > 1 servers.
-- [x] Exporting relevant simulation data.
+This repository contains code and notebooks we used for Assignment 2, covering a discrete event simulation of a simple queueing system implemented using `SimPy`. In the `notebooks/` folder, all relevant plots can be found (note that the notebook marked `UNUSED` was ommitted from the report). 
 
-### Project-related
-
-- [ ] Add introduction section.
-- [ ] Consider CLI interface.
-- [ ] Consider Jupyter Notebook interface.
-- [ ] Specify code requirements.
-- [ ] ...
-
+Simulation data was generated from the command-line (excluding some parts of the notebook) for which bash scripts can be found in . 
 
 ## Project Structure
 
 ```
-├── examples/               # Example code for SimPy
-│   ├── example_queue.py
-│   └── example_simpy.py
+.
+├── bash_scripts/           # DATA GENERATION
+│   └── ...
 │
-├── main.py                 # Orchastrates simulation
-├── Queue.py                # DES class
+├── data/                   # DATASETS
+│   ├── iterations_rho_required.csv
+│   └── simulation_averages/
+│       └── ...
 │
-└── README.md               # Overview of project
+├── notebooks/              # PLOTS
+│   ├── comparisons_queueing_systems.ipynb
+│   ├── statistical_evaluation.ipynb
+│   └── UNUSED_steady_state_analysis.ipynb
+│   
+├── helpers.py              # Helper functions
+├── main.py                 # Handles CLI use (see below)
+├── Metrics.py              # Class handling system metrics
+├── Queue.py                # Class handling queueing system
+│
+├── LICENSE
+├── README.md
+└── requirements.txt
 ```
 
+## Installation
 
-## Example Output
+1. Clone the repository:
+```bash
+git clone https://github.com/DKLEINLEUNK/DES-simple-queues
+```
+2. Change directory to the cloned repository.
+3. Install the required dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+## Instructions Command-Line Interface
+
+Simulations may be run using the command-line using `python3 main.py [args]`. The following arguments may be specified:
+
+```bash
+python3 main.py queue_system run_time [-h] [-c CUSTOMERS] [-l ARRIVAL_RATE] [-m SERVICE_RATE] [-d DISCIPLINE] [-n N] [--save] [--save_raw]
+```
 
 ```
-simulation = QueueSimulation(
-    n_servers = 2,
-    discipline = 'FIFO',
-    mean_service_rate = 1,
-    mean_arrival_rate = 1, 
-    max_customers = 50,
-    max_runtime = 100,
-    seed = 69420
-)
+Simulate queueing systems and measure performance
 
-      ID  Arrival time  Waiting time  Service time  Departure time  in_queue  in_system
-0    1.0      0.000000      0.000000      0.381812        0.381812       0.0        0.0
-1    3.0      2.068666      0.000000      0.201936        2.270602       0.0        1.0
-2    2.0      1.145684      0.000000      2.097446        3.243130       0.0        0.0
-3    5.0      3.522828      0.000000      0.866411        4.389239       0.0        1.0
-4    6.0      3.561165      0.828074      0.038076        4.427315       0.0        2.0
-5    4.0      2.821559      0.000000      2.239492        5.061051       0.0        1.0
-6    7.0      3.986240      0.441075      1.747551        6.174866       1.0        3.0
-7    9.0      4.960351      1.214515      0.602632        6.777499       1.0        3.0
-8   10.0      5.638694      1.138805      0.738463        7.515962       1.0        3.0
-9   11.0      6.886446      0.629516      0.188823        7.704784       0.0        2.0
-10  12.0      7.671872      0.032912      1.020193        8.724977       0.0        2.0
-11   8.0      4.594788      0.466263      4.275975        9.337026       0.0        2.0
-12  13.0      7.833437      0.891540      1.343684       10.068661       0.0        2.0
-13  15.0      9.515215      0.553445      0.250577       10.319237       0.0        2.0
-14  16.0     10.273709      0.045528      0.143551       10.462789       0.0        2.0
-15  14.0      8.000794      1.336232      1.558123       10.895149       1.0        3.0
-16  17.0     11.179285      0.000000      0.587129       11.766414       0.0        0.0
-17  18.0     12.370520      0.000000      0.816961       13.187481       0.0        0.0
-18  20.0     13.947941      0.000000      0.388917       14.336858       0.0        1.0
-19  19.0     13.694212      0.000000      1.162105       14.856317       0.0        0.0
-20  21.0     16.298588      0.000000      1.101316       17.399903       0.0        0.0
-21  22.0     16.400282      0.000000      1.257771       17.658053       0.0        1.0
-22  23.0     18.226515      0.000000      0.849752       19.076267       0.0        0.0
-23  24.0     19.498519      0.000000      0.831377       20.329895       0.0        0.0
-24  25.0     23.327512      0.000000      0.010587       23.338098       0.0        0.0
-25  26.0     24.276564      0.000000      0.679393       24.955957       0.0        0.0
-26  27.0     25.032736      0.000000      0.142403       25.175139       0.0        0.0
-27  28.0     26.264204      0.000000      0.018791       26.282995       0.0        0.0
-28  30.0     28.893811      0.000000      0.058531       28.952342       0.0        1.0
-29  29.0     28.215249      0.000000      1.860194       30.075444       0.0        0.0
-30  32.0     29.093071      0.982372      0.423305       30.498749       0.0        2.0
-31  33.0     29.787314      0.711435      0.057672       30.556421       1.0        3.0
-32  31.0     29.061124      0.000000      2.532539       31.593663       0.0        1.0
-33  34.0     31.763085      0.000000      1.205348       32.968433       0.0        0.0
-34  36.0     32.618887      0.349546      0.178800       33.147233       0.0        2.0
-35  35.0     32.028368      0.000000      1.219746       33.248114       0.0        1.0
-36  37.0     34.309959      0.000000      0.103671       34.413630       0.0        0.0
-37  38.0     36.414540      0.000000      0.540604       36.955144       0.0        0.0
-38  40.0     37.020453      0.000000      1.883865       38.904318       0.0        1.0
-39  39.0     36.934698      0.000000      2.260018       39.194715       0.0        1.0
-40  42.0     37.960322      1.234393      0.897567       40.092282       1.0        3.0
-41  43.0     38.381090      1.711191      0.575135       40.667417       2.0        4.0
-42  44.0     38.613150      2.054267      0.203732       40.871149       3.0        5.0
-43  45.0     38.889329      1.981820      0.060319       40.931469       4.0        6.0
-44  41.0     37.591577      1.312741      4.082990       42.987308       0.0        2.0
-45  47.0     39.779551      3.207757      0.042749       43.030056       4.0        6.0
-46  48.0     40.031715      2.998341      1.533913       44.563969       5.0        7.0
-47  46.0     39.089955      1.841514      3.796509       44.727978       4.0        6.0
-48  49.0     40.227544      4.336425      0.297021       44.860990       5.0        7.0
-49  50.0     40.451279      4.276699      0.442050       45.170028       6.0        8.0
+positional arguments:
+  queue_system          Queueing system to use in kendall notation, f.e. MM1
+  run_time              max run_time used per simulation
+
+options:
+  -h, --help            show this help message and exit
+  -c CUSTOMERS, --customers CUSTOMERS
+                        max customers arriving in one simulation
+  -l ARRIVAL_RATE, --arrival_rate ARRIVAL_RATE
+                        mean arrival rate (lambda)
+  -m SERVICE_RATE, --service_rate SERVICE_RATE
+                        mean service rate (mu)
+  -d DISCIPLINE, --discipline DISCIPLINE
+                        how to select from queue (FIFO or SJF)
+  -n N                  number of simulations
+  --save                store average results in csv
+  --save_raw            store all data in csv for each simulation
 ```
