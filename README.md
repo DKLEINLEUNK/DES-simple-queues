@@ -18,7 +18,7 @@ Authored by:
 
 ## Introduction
 
-This repository contains code and notebooks we used for Assignment 2, covering a discrete event simulation of a simple queueing system implemented using `SimPy`. In the `notebooks/` folder, all relevant plots can be found (note that the notebook marked `UNUSED` was ommitted from the report). 
+This repository contains code and notebooks we used for Assignment 2, covering a discrete event simulation of a simple queueing system implemented using `SimPy`. In the `notebooks/` folder, all relevant plots can be found. 
 
 Simulation data was generated from the command-line (excluding some parts of the notebook) for which bash scripts can be found in . 
 
@@ -36,8 +36,7 @@ Simulation data was generated from the command-line (excluding some parts of the
 │
 ├── notebooks/              # PLOTS
 │   ├── comparisons_queueing_systems.ipynb
-│   ├── statistical_evaluation.ipynb
-│   └── UNUSED_steady_state_analysis.ipynb
+│   └── statistical_evaluation.ipynb
 │   
 ├── helpers.py              # Helper functions
 ├── main.py                 # Handles CLI use (see below)
