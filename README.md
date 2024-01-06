@@ -1,8 +1,8 @@
-# Discrete Event Simulation: Simple Queueing Systems
+# Queueing System Simulator
 
 ![Image](overview_plot.png)
 
-Authored by:
+A discrete event simulation command-line tool for queueing systems. Authored by,
 - [@DKLEINLEUNK](https://github.com/DKLEINLEUNK)
 - [@HollydP](https://github.com/HollydP)
 - [@Ninavd](https://github.com/Ninavd)
