@@ -2,12 +2,10 @@
 
 ![Image](overview_plot.png)
 
-Stochastic Simulation, Assignment 2. 
-
 Authored by:
-- David - 12992976
-- Holly - 15055108
-- Nina  - 12896934
+- [@DKLEINLEUNK](https://github.com/DKLEINLEUNK)
+- [@HollydP](https://github.com/HollydP)
+- [@Ninavd](https://github.com/Ninavd)
 
 ## Table of Content
 
